@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Project Specific
+.chromadb/
+.chromadb_test*/
+tailored*.tex
+*.log
+
+# Environment Variables
+.env
+
+# MacOS
+.DS_Store
