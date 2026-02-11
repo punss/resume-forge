@@ -4,7 +4,7 @@
 1. **LM Studio**: Must be running locally.
    - Server: Start the server at `http://localhost:1234/v1`.
    - Model: Load a chat model (e.g., Gemma-8B, Mistral, Llama 3).
-2. **Environment**: Ensure the Python environment is active and dependencies are installed (`pip install -e .`).
+3. **Hardware Acceleration**: On macOS with Apple Silicon (M1/M2/M3), the application automatically uses **MPS (Metal Performance Shaders)** for embeddings, providing similar performance gains to MLX. Ensure LM Studio also has Metal/GPU acceleration enabled in its settings for the best experience.
 
 ---
 
@@ -14,6 +14,8 @@ Create a directory (default: `./vault`) and add Markdown files representing your
 - **Projects**: `vault/project_name.md`
 - **Roles**: `vault/role_company.md`
 - **Education/Skills**: `vault/skills.md`
+
+**Templates**: Use the provided `vault/_template_project.md` and `vault/_template_role.md` as a starting point. Files starting with `_` are automatically excluded from ingestion.
 
 **Tip**: Use clear headers and metrics in your markdown files. The RAG system uses these to find relevant content.
 

@@ -33,6 +33,12 @@ def ingest_vault(vault_path: str) -> int:
     )
     documents = loader.load()
     
+    # Filter out templates (files starting with _)
+    documents = [
+        doc for doc in documents 
+        if not os.path.basename(doc.metadata.get("source", "")).startswith("_")
+    ]
+    
     if not documents:
         return 0
 
