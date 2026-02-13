@@ -1,13 +1,20 @@
-import typer
-import sys
+import warnings
+
+# Suppress non-critical warnings to keep CLI output clean
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", message=".*LangChainDeprecationWarning.*")
+warnings.filterwarnings("ignore", message=".*NotOpenSSLWarning.*")
+
 from pathlib import Path
+
+import typer
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
+from resume_forge.llm import check_llm_status
+from resume_forge.pipeline import tailor_resume_section
 from resume_forge.vectorstore import ingest_vault
-from resume_forge.pipeline import build_rag_chain
-
-from langchain.schema import HumanMessage, SystemMessage
 
 app = typer.Typer(help="Resume-Forge: Privacy-first AI Resume Tailor")
 console = Console()
@@ -23,7 +30,7 @@ def ingest(
     Ingest markdown files from the vault directory into the vector store.
     """
     console.print(f"[bold blue]ingesting vault from:[/bold blue] {vault_dir}")
-    
+
     try:
         with Progress(
             SpinnerColumn(),
@@ -32,9 +39,9 @@ def ingest(
         ) as progress:
             task = progress.add_task(description="Processing files...", total=None)
             count = ingest_vault(str(vault_dir))
-        
+
         console.print(f"[bold green]Successfully ingested {count} chunks![/bold green]")
-        
+
     except Exception as e:
         console.print(f"[bold red]Error during ingestion:[/bold red] {e}")
         raise typer.Exit(code=1)
@@ -48,6 +55,12 @@ def tailor(
     """
     Tailor a resume based on the provided Job Description and LaTeX template.
     """
+    # 0. Check LLM Status
+    if not check_llm_status():
+        console.print("[bold red]Error:[/bold red] LLM endpoint is not reachable or no models are loaded.")
+        console.print("[dim]Please ensure LM Studio is running and a model is loaded in the 'Local Server' tab.[/dim]")
+        raise typer.Exit(code=1)
+
     # 1. Resolve Job Description (File vs String)
     jd_text = ""
     try:
@@ -58,7 +71,7 @@ def tailor(
         else:
             jd_text = jd
     except OSError:
-        # If it's a very long string that happens to be an invalid path (too long filename), treat as text
+        # If it's a very long string that happens to be an invalid path, treat as text
         jd_text = jd
 
     if not jd_text.strip():
@@ -74,28 +87,16 @@ def tailor(
 
     # 3. Running RAG Pipeline
     console.print("[bold blue]Generating tailored content...[/bold blue]")
-    
+
     try:
-        # Load chain locally to avoid overhead if just ingesting
-        chain = build_rag_chain()
-        
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
             transient=True,
         ) as progress:
-            progress.add_task(description="Thinking...", total=None)
-            
-            # We invoke the chain with the JD and the Template content
-            # The prompt expects 'job_description' and 'section_template'
-            # Here we are passing the FULL template as 'section_template' based on current implementation
-            # Ideally we might want to split it by sections, but for now passing the whole thing 
-            # and letting the LLM fill placeholders is the strategy.
-            response = chain.invoke({
-                "job_description": jd_text,
-                "section_template": template_content
-            })
-            
+            progress.add_task(description="Tailoring resume sections...", total=None)
+            response = tailor_resume_section(jd_text, template_content)
+
     except Exception as e:
         console.print(f"[bold red]Error generating resume:[/bold red] {e}")
         raise typer.Exit(code=1)

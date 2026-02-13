@@ -1,16 +1,115 @@
-\documentclass{article}
-\usepackage{titlesec}
-\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\documentclass[10pt,a4paper]{report}
+
+\usepackage[textwidth= 380.0pt,
+textheight =582.0pt,
+left= 36.135pt, % 1in + 31pt
+right= 36.135pt, % 1in + 20pt
+]{geometry}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\textheight=10in
+\pagestyle{empty}
+\raggedright
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+\def\bull{\vrule height 0.8ex width .7ex depth -.1ex }
+
+% DEFINITIONS FOR RESUME %%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\area} [2] {
+	\vspace*{-9pt}
+	\begin{verse}
+		\textbf{#1}   #2
+	\end{verse}
+}
+
+\newcommand{\lineunder} {
+	\vspace*{-8pt} \\
+	\hspace*{-18pt} \hrulefill \\
+}
+
+\newcommand{\header} [1] {
+	{\hspace*{-18pt}\vspace*{6pt} \textsc{#1}}
+	\vspace*{-6pt} \lineunder
+}
+
+\newcommand{\employer} [3] {
+	{ \textbf{#1} (#2)\\ \underline{\textbf{\emph{#3}}}\\  }
+}
+
+\newcommand{\contact} [3] {
+	\vspace*{-10pt}
+	\begin{center}
+		{\Huge \scshape {#1}}\\
+		#2 \\ #3
+	\end{center}
+	\vspace*{-8pt}
+}
+
+\newenvironment{achievements}{
+	\begin{list}
+		{$\bullet$}{\topsep 0pt \itemsep -2pt}}{\vspace*{4pt}
+	\end{list}
+}
+
+\newcommand{\schoolwithcourses} [4] {
+	\textbf{#1} #2 $\bullet$ #3\\
+	#4 \\
+	\vspace*{5pt}
+}
+
+\newcommand{\school} [4] {
+	\textbf{#1} #2 $\bullet$ #3\\
+	#4 \\
+}
+% END RESUME DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-
-\section{Experience}
-%% EXPERIENCE %%
-
-\section{Projects}
-%% PROJECTS %%
-
-\section{Skills}
-%% SKILLS %%
-
+	
+	\vspace*{-40pt}
+	
+	%==== Profile ====%
+	\vspace*{-10pt}
+	\begin{center}
+		{\Huge \scshape {Hridik Punukollu}}\\
+		Boston, MA $\cdot$ \href{mailto:punukollu.h@northeastern.edu}{\underline{punukollu.h@northeastern.edu}} $\cdot$ (857) 867-1681 $\cdot$ \href{https://www.linkedin.com/in/hridikp/}{\underline{linkedin.com/in/hridikp/}} \\
+	\end{center}
+	
+	%==== Education ====%
+	\vspace{-2mm}
+	\header{Education}
+	\vspace{1mm}
+	\textbf{Northeastern University}\hfill Boston, MA\\
+	M.S. Operations Research, \textit{GPA: 4.0} \hfill Expected December 2026\\
+	\textit{Relevant Courses:} Advanced Optimization \& Networks, Probability and Statistics, Probabilistic OR \\
+	\textit{Relevant Work:} Course Assistant - Probability and Statistics for Engineers\\
+	
+	\vspace{1mm}
+	\textbf{Birla Institute of Technology and Science, Pilani}\hfill India\\
+	B.E. Civil Engineering, \textit{GPA: 3.66} \hfill June 2022\\
+	\textit{Relevant Courses:} Multi-Criterion Decision Making, Applications of AI, Data Mining, Operations Research
+	
+	\vspace{2mm}
+	\header{Skills}
+	\hspace{-3mm}
+	%% SKILLS %%
+	
+	\vspace{1mm}
+	
+	\header{Work Experience}
+	
+	%% EXPERIENCE %%    
+	
+	\vspace{-1mm}
+	\header{Projects}
+	
+	%% PROJECTS %%
+	
 \end{document}

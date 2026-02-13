@@ -21,5 +21,9 @@ tailored*.tex
 # Environment Variables
 .env
 
+# SSH Keys
+git_ssh
+git_ssh.pub
+
 # MacOS
 .DS_Store

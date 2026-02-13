@@ -8,7 +8,7 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_core.documents import Document
 
 from resume_forge.config import settings
-from resume_forge.embeddings import get_embeddings
+from resume_forge.embeddings import get_embeddings, clear_embeddings_cache
 
 def ingest_vault(vault_path: str) -> int:
     """
@@ -18,10 +18,10 @@ def ingest_vault(vault_path: str) -> int:
     if not os.path.exists(vault_path):
         raise FileNotFoundError(f"Vault directory not found: {vault_path}")
 
-    # clean slate for simplicity? Or append? 
-    # For now, let's clear existing collection to avoid duplicates on re-ingest
-    # But since it's a CLI tool, maybe we want to just add? 
-    # Let's keep it simple: recreate collection.
+    # Clear caches so the embedding model is re-initialized fresh
+    clear_embeddings_cache()
+
+    # Recreate collection to avoid duplicates on re-ingest
     if os.path.exists(settings.CHROMA_PERSIST_DIR):
         shutil.rmtree(settings.CHROMA_PERSIST_DIR)
 

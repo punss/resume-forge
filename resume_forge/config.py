@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
     DEVICE: str = "auto"  # 'auto', 'cpu', 'mps', 'cuda'
     TOP_K: int = 10
+    ACTION_WORDS_FILE: str = "templates/action_words.json"
     PROMPTS_FILE: str = "templates/prompts.yaml"
 
     class Config:
